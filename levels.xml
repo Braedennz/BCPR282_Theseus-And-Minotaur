@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding='UTF-8'?>
+<mazes>
+    <maze>
+        <name>Maze 1 (3 x 3)</name>
+        <walls>
+            <horizontal>
+                <row>---o</row>
+                <row>o-o-</row>
+                <row>o-o-</row>
+                <row>---o</row>
+            </horizontal>
+            <vertical>
+                <row>|oo|o</row>
+                <row>|o|oo</row>
+                <row>|oo|o</row>
+            </vertical>
+        </walls>
+        <positions>
+            <theseus>
+                <x>1</x>
+                <y>2</y>
+            </theseus>
+            <minotaur>
+                <x>1</x>
+                <y>0</y>
+            </minotaur>
+            <exit>
+                <x>3</x>
+                <y>1</y>
+            </exit>
+        </positions>
+    </maze>
+</mazes>
