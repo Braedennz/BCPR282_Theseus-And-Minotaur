@@ -37,6 +37,17 @@ public class GamePoint implements IPoint {
 	}
 
 	@Override
+	public int[] nextLocation(int x, int y) {
+		int nextX = this.x;
+		int nextY = this.y;
+		
+		nextX += x;
+		nextY += y;
+		
+		return new int[]{nextX, nextY};
+	}
+
+	@Override
 	public void moveLocation(int x, int y) {
 		this.x += x;
 		this.y += y;

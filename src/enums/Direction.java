@@ -14,4 +14,8 @@ public enum Direction {
 		this.x = x;
 		this.y = y;
 	}
+	
+	public String toString() {
+		return this.name();
+	}
 }

@@ -58,6 +58,12 @@ public class GameController implements IGame, ILoadable, ISavable {
 		System.out.println("\nTheseus loaded, position: " + this.theseusCharacter.toString());
 		System.out.println("Minotaur loaded, position: " + this.minotaurCharacter.toString());
 		System.out.println("Exit loaded, position: " + this.exitCharacter.toString());
+
+		System.out.println("\nTesting Theseus Movement:\n");
+		
+		this.moveTheseus(Direction.UP);
+		this.moveTheseus(Direction.UP);
+		this.moveTheseus(Direction.UP);
 	}
 	
 	public void stop() {
@@ -71,8 +77,37 @@ public class GameController implements IGame, ILoadable, ISavable {
 
 	@Override
 	public void moveTheseus(Direction direction) {
-		// TODO Auto-generated method stub
+		boolean canMove = false;
+		int[] nextLocation = theseusCharacter.nextLocation(direction.x, direction.y);
 		
+		System.out.println("POSITION BEFORE THESEUS MOVE: " + theseusCharacter.toString());
+		
+		switch(direction) {
+			case UP:
+				
+				if(this.whatsAbove(new GamePoint(nextLocation[0], nextLocation[1])) != Wall.SOMETHING) {
+					canMove = true;
+				}
+				
+				break;
+			case DOWN:
+				
+				break;
+			case LEFT:
+				
+				break;
+			case RIGHT:
+				
+				break;
+		}
+		
+		if(canMove) {
+			theseusCharacter.moveLocation(direction.x, direction.y);
+			
+			System.out.println("POSITION AFTER THESEUS MOVE: " + theseusCharacter.toString());
+		} else {
+			System.out.println("Can't move " + direction.toString() + ", character blocked.");
+		}
 	}
 
 	@Override
@@ -95,6 +130,7 @@ public class GameController implements IGame, ILoadable, ISavable {
 	public void setWidthAcross(int widthAcross) {
 		this.mazeWidthAcross = widthAcross;
 		
+		/* Call reset of grid because size has changed */
 		if (this.mazeDepthDown > 0) {
             this.createGrid();
         }
@@ -103,7 +139,8 @@ public class GameController implements IGame, ILoadable, ISavable {
 	@Override
 	public void setDepthDown(int depthDown) {
 		this.mazeDepthDown = depthDown;
-		
+
+		/* Call reset of grid because size has changed */
 		if (this.mazeWidthAcross > 0) {
             this.createGrid();
         }
@@ -161,10 +198,16 @@ public class GameController implements IGame, ILoadable, ISavable {
 	 * @see interfaces.ISavable
 	 */
 
+	/*
+	 * TODO: Make a boundary for -1 values, ban em.
+	 */
 	@Override
 	public Wall whatsAbove(IPoint where) {
-		// TODO Auto-generated method stub
-		return null;
+		if(where.getX() == -1 || where.getY() == -1) {
+			return Wall.SOMETHING;
+		}
+		
+		return topWalls[where.getX()][where.getY()];
 	}
 
 	@Override
@@ -175,20 +218,17 @@ public class GameController implements IGame, ILoadable, ISavable {
 
 	@Override
 	public IPoint wheresTheseus() {
-		// TODO Auto-generated method stub
-		return null;
+		return theseusCharacter;
 	}
 
 	@Override
 	public IPoint wheresMinotaur() {
-		// TODO Auto-generated method stub
-		return null;
+		return minotaurCharacter;
 	}
 
 	@Override
 	public IPoint wheresExit() {
-		// TODO Auto-generated method stub
-		return null;
+		return exitCharacter;
 	}
 	
 }
