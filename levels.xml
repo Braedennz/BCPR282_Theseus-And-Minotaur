@@ -10,9 +10,10 @@
                 <row>---o</row>
             </horizontal>
             <vertical>
-                <row>|oo|o</row>
-                <row>|o|oo</row>
-                <row>|oo|o</row>
+                <row>-oo-</row>
+                <row>-o-o</row>
+                <row>-oo-</row>
+                <row>oooo</row>
             </vertical>
         </walls>
         <positions>
