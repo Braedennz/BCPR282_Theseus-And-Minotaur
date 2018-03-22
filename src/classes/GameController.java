@@ -27,14 +27,12 @@ public class GameController implements IGame, ILoadable, ISavable {
 	public void start() {
 		System.out.println("Starting Theseus and Minotaur...");
 		
-		System.out.println("Loading maze level...");
+		System.out.println("\nLoading maze level...");
 		
 		FileLoader xmlLoader = new FileLoader();
 		xmlLoader.loadLevel(this);
 		
 		System.out.println("\n--- Loaded " + this.gameTitle + " ---");
-
-		System.out.println("\n--- Loaded Map ---");
 		
 		System.out.println("\nTOP WALLS:");
 		
@@ -56,6 +54,8 @@ public class GameController implements IGame, ILoadable, ISavable {
 		}
 		
 		System.out.println("\n--- Loading characters ---");
+		System.out.println("\nTheseus loaded, position (x,y): " + this.theseusCharacter.toString());
+		System.out.println("Minotaur loaded, position (x,y): " + this.minotaurCharacter.toString());
 	}
 	
 	public void stop() {
@@ -121,20 +121,22 @@ public class GameController implements IGame, ILoadable, ISavable {
 
 	@Override
 	public void addWallAbove(IPoint where) {
-		this.topWalls[where.getRow()][where.getCol()] = Wall.SOMETHING;
+		this.topWalls[where.getX()][where.getY()] = Wall.SOMETHING;
 	}
 
 	@Override
 	public void addWallLeft(IPoint where) {
-        this.leftWalls[where.getRow()][where.getCol()] = Wall.SOMETHING;
+        this.leftWalls[where.getX()][where.getY()] = Wall.SOMETHING;
 	}
 
 	@Override
 	public void addTheseus(IPoint characterPoint) {
+		this.theseusCharacter = new GamePoint(characterPoint);
 	}
 
 	@Override
 	public void addMinotaur(IPoint characterPoint) {
+		this.minotaurCharacter = new GamePoint(characterPoint);
 	}
 
 	@Override

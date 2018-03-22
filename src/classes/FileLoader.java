@@ -44,6 +44,9 @@ public class FileLoader implements ILoader {
 		addWallsToGame(gameController, "verticalAdd", verticalWalls);
 		addWallsToGame(gameController, "horizontalAdd", horizontalWalls);
 		
+		//Create character position
+		gameController.addTheseus(addCharacterToGame(gameController, "theseus", mazeItem));
+		gameController.addMinotaur(addCharacterToGame(gameController, "minotaur", mazeItem));
 	}
 	
 	/*
@@ -51,7 +54,7 @@ public class FileLoader implements ILoader {
 	 * Load the XML file and return it
 	 * TODO : Better way of getting directory for file
 	 */
-	
+
 	protected Document getXmlFile() {
 		//File fXmlFile = new File("E:/Dropbox/ARA/2018, February, Semester One/Java/TheseusAndMinotaur/levels.xml");
 		File fXmlFile = new File("/Users/AMacADay/Dropbox/ARA/2018, February, Semester One/Java/BCPR282_Theseus-And-Minotaur/levels.xml");
@@ -100,13 +103,10 @@ public class FileLoader implements ILoader {
 	 */
 	
 	protected NodeList getMazeWalls(Element mazeItem, String direction) {
-		Node walls = mazeItem.getElementsByTagName("walls").item(0);
-        Element wallsE = ((Element)walls);
+		Element walls = (Element) mazeItem.getElementsByTagName("walls").item(0);
+		Element directedWalls = (Element) walls.getElementsByTagName(direction).item(0);
         
-        Node hWalls = wallsE.getElementsByTagName(direction).item(0);
-        Element hWallsE = (Element)hWalls;
-        
-        return hWallsE.getElementsByTagName("row");
+        return directedWalls.getElementsByTagName("row");
 	}
 	
 	/*
@@ -130,5 +130,20 @@ public class FileLoader implements ILoader {
 				 }
 			 }
 		}
+	}
+
+	/*
+	 * addCharacterToGame(ILoadable gameController, String characterName (theseus or minotaur), Element mazeItem)
+	 * Returns coordinates for character from XML Doc
+	 * Return: GamePoint(x,y)
+	 */
+	protected GamePoint addCharacterToGame(ILoadable gameController, String characterName, Element mazeItem) {
+		Element characterItems = (Element) mazeItem.getElementsByTagName("positions").item(0);
+		Element actualCharacterItem = (Element) characterItems.getElementsByTagName(characterName).item(0);
+		
+		int x =  Integer.valueOf(actualCharacterItem.getElementsByTagName("x").item(0).getTextContent());
+		int y =  Integer.valueOf(actualCharacterItem.getElementsByTagName("y").item(0).getTextContent());
+		
+		return new GamePoint(x, y);
 	}
 }
