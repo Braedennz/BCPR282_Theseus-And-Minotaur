@@ -19,12 +19,13 @@ public class GameController implements IGame, ILoadable, ISavable {
 
 	public GamePoint theseusCharacter;
 	public GamePoint minotaurCharacter;
+	public GamePoint exitCharacter;
 	
 	/*
 	 * start()
 	 * Start's engine for game, e.g. map, characters
 	 */
-	public void start() {
+	public GameController() {
 		System.out.println("Starting Theseus and Minotaur...");
 		
 		System.out.println("\nLoading maze level...");
@@ -38,7 +39,7 @@ public class GameController implements IGame, ILoadable, ISavable {
 		
 		for(int i = 0; i < this.topWalls.length; i++) {
 			for(int j = 0; j < this.topWalls[i].length; j++) {
-				System.out.print("  " + this.topWalls[i][j].toString() + ",");
+				System.out.print("  " + this.topWalls[i][j].toString());
 			}
 			System.out.println("");
 		}
@@ -48,14 +49,15 @@ public class GameController implements IGame, ILoadable, ISavable {
 		
 		for(int i = 0; i < this.leftWalls.length; i++) {
 			for(int j = 0; j < this.leftWalls[i].length; j++) {
-				System.out.print("  " + this.leftWalls[i][j].toString() + ",");
+				System.out.print("  " + this.leftWalls[i][j].toString());
 			}
 			System.out.println("");
 		}
 		
 		System.out.println("\n--- Loading characters ---");
-		System.out.println("\nTheseus loaded, position (x,y): " + this.theseusCharacter.toString());
-		System.out.println("Minotaur loaded, position (x,y): " + this.minotaurCharacter.toString());
+		System.out.println("\nTheseus loaded, position: " + this.theseusCharacter.toString());
+		System.out.println("Minotaur loaded, position: " + this.minotaurCharacter.toString());
+		System.out.println("Exit loaded, position: " + this.exitCharacter.toString());
 	}
 	
 	public void stop() {
@@ -140,9 +142,8 @@ public class GameController implements IGame, ILoadable, ISavable {
 	}
 
 	@Override
-	public void addExit(IPoint where) {
-		// TODO Auto-generated method stub
-		
+	public void addExit(IPoint characterPoint) {
+		this.exitCharacter = new GamePoint(characterPoint);
 	}
 	
 	@Override

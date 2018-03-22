@@ -31,8 +31,8 @@ public class FileLoader implements ILoader {
 		gameController.setGameTitle(mazeItem.getElementsByTagName("name").item(0).getTextContent());
 		
 		//get horizontal and vertical row of walls
-		NodeList horizontalWalls = getMazeWalls(mazeItem, "horizontal");
-        NodeList verticalWalls = getMazeWalls(mazeItem, "vertical");
+		NodeList horizontalWalls = this.getMazeWalls(mazeItem, "horizontal");
+        NodeList verticalWalls = this.getMazeWalls(mazeItem, "vertical");
 		
         //Set the amount of horizontal rows maze will have
 		gameController.setWidthAcross(horizontalWalls.getLength());
@@ -41,12 +41,13 @@ public class FileLoader implements ILoader {
 		gameController.setDepthDown(verticalWalls.item(0).getTextContent().length());
 		
 		//Add all the walls from NodeList to multi level array by wall per row
-		addWallsToGame(gameController, "verticalAdd", verticalWalls);
-		addWallsToGame(gameController, "horizontalAdd", horizontalWalls);
+		this.addWallsToGame(gameController, "verticalAdd", verticalWalls);
+		this.addWallsToGame(gameController, "horizontalAdd", horizontalWalls);
 		
 		//Create character position
-		gameController.addTheseus(addCharacterToGame(gameController, "theseus", mazeItem));
-		gameController.addMinotaur(addCharacterToGame(gameController, "minotaur", mazeItem));
+		gameController.addTheseus(this.addCharacterToGame("theseus", mazeItem));
+		gameController.addMinotaur(this.addCharacterToGame("minotaur", mazeItem));
+		gameController.addExit(this.addCharacterToGame("exit", mazeItem));
 	}
 	
 	/*
@@ -137,7 +138,7 @@ public class FileLoader implements ILoader {
 	 * Returns coordinates for character from XML Doc
 	 * Return: GamePoint(x,y)
 	 */
-	protected GamePoint addCharacterToGame(ILoadable gameController, String characterName, Element mazeItem) {
+	protected GamePoint addCharacterToGame(String characterName, Element mazeItem) {
 		Element characterItems = (Element) mazeItem.getElementsByTagName("positions").item(0);
 		Element actualCharacterItem = (Element) characterItems.getElementsByTagName(characterName).item(0);
 		
