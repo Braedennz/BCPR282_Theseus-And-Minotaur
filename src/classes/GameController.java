@@ -61,9 +61,8 @@ public class GameController implements IGame, ILoadable, ISavable {
 
 		System.out.println("\nTesting Theseus Movement:\n");
 		
-		this.moveTheseus(Direction.UP);
-		this.moveTheseus(Direction.UP);
-		this.moveTheseus(Direction.UP);
+		this.moveTheseus(Direction.DOWN);
+		this.moveTheseus(Direction.RIGHT);
 	}
 	
 	public void stop() {
@@ -75,36 +74,44 @@ public class GameController implements IGame, ILoadable, ISavable {
 	 * @see interfaces.IGame
 	 */
 
+	/*
+	 * TODO: Clean up case, don't need so many function calls.
+	 * 		 maybe re-use the switch statement for minotaur
+	 */
 	@Override
 	public void moveTheseus(Direction direction) {
 		boolean canMove = false;
 		int[] nextLocation = theseusCharacter.nextLocation(direction.x, direction.y);
 		
-		System.out.println("POSITION BEFORE THESEUS MOVE: " + theseusCharacter.toString());
+		System.out.println("POSITION BEFORE THESEUS MOVES "+ direction.name() +": " + theseusCharacter.toString());
 		
 		switch(direction) {
 			case UP:
-				
 				if(this.whatsAbove(new GamePoint(nextLocation[0], nextLocation[1])) != Wall.SOMETHING) {
 					canMove = true;
 				}
-				
 				break;
 			case DOWN:
-				
+				if(this.whatsAbove(new GamePoint(nextLocation[0], nextLocation[1] + 1)) != Wall.SOMETHING) {
+					canMove = true;
+				}
 				break;
 			case LEFT:
-				
+				if(this.whatsLeft(new GamePoint(nextLocation[0], nextLocation[1])) != Wall.SOMETHING) {
+					canMove = true;
+				}
 				break;
 			case RIGHT:
-				
+				if(this.whatsLeft(new GamePoint(nextLocation[0] + 1, nextLocation[1])) != Wall.SOMETHING) {
+					canMove = true;
+				}
 				break;
 		}
 		
 		if(canMove) {
 			theseusCharacter.moveLocation(direction.x, direction.y);
 			
-			System.out.println("POSITION AFTER THESEUS MOVE: " + theseusCharacter.toString());
+			System.out.println("POSITION AFTER THESEUS MOVES "+ direction.name() +":" + theseusCharacter.toString());
 		} else {
 			System.out.println("Can't move " + direction.toString() + ", character blocked.");
 		}
@@ -203,17 +210,25 @@ public class GameController implements IGame, ILoadable, ISavable {
 	 */
 	@Override
 	public Wall whatsAbove(IPoint where) {
-		if(where.getX() == -1 || where.getY() == -1) {
+		if(where.getY() == -1
+				|| where.getY() >= this.getDepthDown()) {
 			return Wall.SOMETHING;
 		}
 		
 		return topWalls[where.getX()][where.getY()];
 	}
 
+	/*
+	 * TODO: Make a boundary for -1 values, ban em.
+	 */
 	@Override
 	public Wall whatsLeft(IPoint where) {
-		// TODO Auto-generated method stub
-		return null;
+		if(where.getX() == -1 
+				|| where.getX() >= this.getWidthAcross() ) {
+			return Wall.SOMETHING;
+		}
+		
+		return leftWalls[where.getX()][where.getY()];
 	}
 
 	@Override
