@@ -74,39 +74,9 @@ public class GameController implements IGame, ILoadable, ISavable {
 	 * @see interfaces.IGame
 	 */
 
-	/*
-	 * TODO: Clean up case, don't need so many function calls.
-	 * 		 maybe re-use the switch statement for minotaur
-	 */
 	@Override
 	public void moveTheseus(Direction direction) {
-		boolean canMove = false;
-		int[] nextLocation = theseusCharacter.nextLocation(direction.x, direction.y);
-		
-		System.out.println("POSITION BEFORE THESEUS MOVES "+ direction.name() +": " + theseusCharacter.toString());
-		
-		switch(direction) {
-			case UP:
-				if(this.whatsAbove(new GamePoint(nextLocation[0], nextLocation[1])) != Wall.SOMETHING) {
-					canMove = true;
-				}
-				break;
-			case DOWN:
-				if(this.whatsAbove(new GamePoint(nextLocation[0], nextLocation[1] + 1)) != Wall.SOMETHING) {
-					canMove = true;
-				}
-				break;
-			case LEFT:
-				if(this.whatsLeft(new GamePoint(nextLocation[0], nextLocation[1])) != Wall.SOMETHING) {
-					canMove = true;
-				}
-				break;
-			case RIGHT:
-				if(this.whatsLeft(new GamePoint(nextLocation[0] + 1, nextLocation[1])) != Wall.SOMETHING) {
-					canMove = true;
-				}
-				break;
-		}
+		boolean canMove = this.canMove(direction, theseusCharacter);
 		
 		if(canMove) {
 			theseusCharacter.moveLocation(direction.x, direction.y);
@@ -121,6 +91,41 @@ public class GameController implements IGame, ILoadable, ISavable {
 	public void moveMinotaur() {
 		// TODO Auto-generated method stub
 		
+	}
+
+	/*
+	 * TODO: Clean up case, don't need so many function calls.
+	 */
+	@Override
+	public boolean canMove(Direction direction, GamePoint character) {
+		int[] nextLocation = character.nextLocation(direction.x, direction.y);
+		
+		System.out.println("POSITION BEFORE THESEUS MOVES "+ direction.name() +": " + character.toString());
+		
+		switch(direction) {
+			case UP:
+				if(this.whatsAbove(new GamePoint(nextLocation[0], nextLocation[1])) != Wall.SOMETHING) {
+					return true;
+				}
+				break;
+			case DOWN:
+				if(this.whatsAbove(new GamePoint(nextLocation[0], nextLocation[1] + 1)) != Wall.SOMETHING) {
+					return true;
+				}
+				break;
+			case LEFT:
+				if(this.whatsLeft(new GamePoint(nextLocation[0], nextLocation[1])) != Wall.SOMETHING) {
+					return true;
+				}
+				break;
+			case RIGHT:
+				if(this.whatsLeft(new GamePoint(nextLocation[0] + 1, nextLocation[1])) != Wall.SOMETHING) {
+					return true;
+				}
+				break;
+		}
+		
+		return false;
 	}
 	
 	/*
