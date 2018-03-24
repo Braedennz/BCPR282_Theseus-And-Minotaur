@@ -21,7 +21,7 @@ public enum Wall {
 		return id; 
 	}
 	
-	public String toString() {
+	public String toString(String leftOrTop) {
 		String returnValue = null;
 		
 		/* 
@@ -30,10 +30,15 @@ public enum Wall {
 		 */
 		switch(this.id) {
 			case 'o':
-				returnValue = "EMPTY";
+				returnValue = "o";
 				break;
 			case '-':
-				returnValue = "LINE";
+				if(leftOrTop == "top") {
+					returnValue = "-";
+				} else {
+
+					returnValue = "|";
+				}
 				break;
 		}
 		

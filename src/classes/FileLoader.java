@@ -57,8 +57,8 @@ public class FileLoader implements ILoader {
 	 */
 
 	protected Document getXmlFile() {
-		//File fXmlFile = new File("E:/Dropbox/ARA/2018, February, Semester One/Java/TheseusAndMinotaur/levels.xml");
-		File fXmlFile = new File("/Users/AMacADay/Dropbox/ARA/2018, February, Semester One/Java/BCPR282_Theseus-And-Minotaur/levels.xml");
+		File fXmlFile = new File("E:/Dropbox/ARA/2018, February, Semester One/Java/BCPR282_Theseus-And-Minotaur/levels.xml");
+		//File fXmlFile = new File("/Users/AMacADay/Dropbox/ARA/2018, February, Semester One/Java/BCPR282_Theseus-And-Minotaur/levels.xml");
 		
 		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 		

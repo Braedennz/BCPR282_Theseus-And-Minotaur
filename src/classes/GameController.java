@@ -39,7 +39,7 @@ public class GameController implements IGame, ILoadable, ISavable {
 		
 		for(int i = 0; i < this.topWalls.length; i++) {
 			for(int j = 0; j < this.topWalls[i].length; j++) {
-				System.out.print("  " + this.topWalls[i][j].toString());
+				System.out.print("  " + this.topWalls[i][j].toString("top"));
 			}
 			System.out.println("");
 		}
@@ -49,7 +49,7 @@ public class GameController implements IGame, ILoadable, ISavable {
 		
 		for(int i = 0; i < this.leftWalls.length; i++) {
 			for(int j = 0; j < this.leftWalls[i].length; j++) {
-				System.out.print("  " + this.leftWalls[i][j].toString());
+				System.out.print("  " + this.leftWalls[i][j].toString("left"));
 			}
 			System.out.println("");
 		}
@@ -60,9 +60,6 @@ public class GameController implements IGame, ILoadable, ISavable {
 		System.out.println("Exit loaded, position: " + this.exitCharacter.toString());
 
 		System.out.println("\nTesting Theseus Movement:\n");
-		
-		this.moveTheseus(Direction.DOWN);
-		this.moveTheseus(Direction.RIGHT);
 	}
 	
 	public void stop() {
@@ -104,22 +101,22 @@ public class GameController implements IGame, ILoadable, ISavable {
 		
 		switch(direction) {
 			case UP:
-				if(this.whatsAbove(new GamePoint(nextLocation[0], nextLocation[1])) != Wall.SOMETHING) {
-					return true;
-				}
-				break;
-			case DOWN:
 				if(this.whatsAbove(new GamePoint(nextLocation[0], nextLocation[1] + 1)) != Wall.SOMETHING) {
 					return true;
 				}
 				break;
+			case DOWN:
+				if(this.whatsAbove(new GamePoint(nextLocation[0], nextLocation[1])) != Wall.SOMETHING) {
+					return true;
+				}
+				break;
 			case LEFT:
-				if(this.whatsLeft(new GamePoint(nextLocation[0], nextLocation[1])) != Wall.SOMETHING) {
+				if(this.whatsLeft(new GamePoint(nextLocation[0] + 1, nextLocation[1])) != Wall.SOMETHING) {
 					return true;
 				}
 				break;
 			case RIGHT:
-				if(this.whatsLeft(new GamePoint(nextLocation[0] + 1, nextLocation[1])) != Wall.SOMETHING) {
+				if(this.whatsLeft(new GamePoint(nextLocation[0], nextLocation[1])) != Wall.SOMETHING) {
 					return true;
 				}
 				break;
@@ -215,12 +212,12 @@ public class GameController implements IGame, ILoadable, ISavable {
 	 */
 	@Override
 	public Wall whatsAbove(IPoint where) {
-		if(where.getY() == -1
+		if(where.getY() == -1 
 				|| where.getY() >= this.getDepthDown()) {
 			return Wall.SOMETHING;
 		}
 		
-		return topWalls[where.getX()][where.getY()];
+		return topWalls[where.getY()][where.getX()];
 	}
 
 	/*
@@ -233,7 +230,7 @@ public class GameController implements IGame, ILoadable, ISavable {
 			return Wall.SOMETHING;
 		}
 		
-		return leftWalls[where.getX()][where.getY()];
+		return leftWalls[where.getY()][where.getX()];
 	}
 
 	@Override
