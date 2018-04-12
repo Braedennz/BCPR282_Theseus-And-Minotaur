@@ -4,14 +4,14 @@ import classes.GamePoint;
 import enums.Direction;
 
 public interface IGame {
-	
 	void moveTheseus(Direction direction);
-	void skipTheseus();
+	void incrementTheseusMove();
+	boolean theseusHasWon();
 	
 	void moveMinotaur();
+	boolean minotaurHasWon();
 	
-	void incrementTheseusMove();
+	void skipTheseus();
 	
 	boolean canMove(Direction direction, GamePoint character);
-	
 }

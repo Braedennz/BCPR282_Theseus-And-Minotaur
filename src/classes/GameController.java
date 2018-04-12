@@ -39,32 +39,36 @@ public class GameController implements IGame, ILoadable, ISavable {
 		if(xmlLoader.loadLevel(this, levelNumber)) {
 			System.out.println("\n--- Loaded " + this.gameTitle + " ---");
 			
-			System.out.println("\nTOP WALLS:");
-			
-			for(int i = 0; i < this.topWalls.length; i++) {
-				for(int j = 0; j < this.topWalls[i].length; j++) {
-					System.out.print("  " + this.topWalls[i][j].toString("top"));
-				}
-				System.out.println("");
-			}
-			
-			System.out.println("-------");
-			System.out.println("LEFT WALLS:");
-			
-			for(int i = 0; i < this.leftWalls.length; i++) {
-				for(int j = 0; j < this.leftWalls[i].length; j++) {
-					System.out.print("  " + this.leftWalls[i][j].toString("left"));
-				}
-				System.out.println("");
-			}
-			
-			System.out.println("\n--- Loading characters ---");
-			System.out.println("\nTheseus loaded, position: " + this.theseusCharacter.toString());
-			System.out.println("Minotaur loaded, position: " + this.minotaurCharacter.toString());
-			System.out.println("Exit loaded, position: " + this.exitCharacter.toString());			
+			this.readyToPlay = true;
 		} else {
-			System.out.println("Failed to load this level, out of bounds");
+			System.out.println("Failed to load level ("+ levelNumber +"), out of bounds");
 		}
+	}
+	
+	public void displayGameConfiguration() {
+		System.out.println("\nTOP WALLS:");
+		
+		for(int i = 0; i < this.topWalls.length; i++) {
+			for(int j = 0; j < this.topWalls[i].length; j++) {
+				System.out.print("  " + this.topWalls[i][j].toString("top"));
+			}
+			System.out.println("");
+		}
+		
+		System.out.println("-------");
+		System.out.println("LEFT WALLS:");
+		
+		for(int i = 0; i < this.leftWalls.length; i++) {
+			for(int j = 0; j < this.leftWalls[i].length; j++) {
+				System.out.print("  " + this.leftWalls[i][j].toString("left"));
+			}
+			System.out.println("");
+		}
+		
+		System.out.println("\n--- Loaded characters ---");
+		System.out.println("\nTheseus loaded, position: " + this.theseusCharacter.toString());
+		System.out.println("Minotaur loaded, position: " + this.minotaurCharacter.toString());
+		System.out.println("Exit loaded, position: " + this.exitCharacter.toString());
 	}
 	
 	/*
@@ -105,6 +109,16 @@ public class GameController implements IGame, ILoadable, ISavable {
 	public void moveMinotaur() {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public boolean theseusHasWon() {
+		return theseusCharacter.equals(exitCharacter);
+	}
+
+	@Override
+	public boolean minotaurHasWon() {
+		return minotaurCharacter.equals(theseusCharacter);
 	}
 
 	/*

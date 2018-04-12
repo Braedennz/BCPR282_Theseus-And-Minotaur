@@ -52,6 +52,11 @@ public class GamePoint implements IPoint {
 		this.x += x;
 		this.y += y;
 	}
+
+	@Override
+	public boolean equals(IPoint character) {
+		return this.x == character.getX() && this.y == character.getY();
+	}
 	
 	public String toString() {
 		return "X: " + this.getX() + ", Y: " + this.getY();
