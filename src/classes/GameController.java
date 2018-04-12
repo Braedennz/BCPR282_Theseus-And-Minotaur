@@ -9,6 +9,8 @@ import interfaces.ISavable;
 
 public class GameController implements IGame, ILoadable, ISavable {
 	
+	public boolean readyToPlay = false;
+	
 	public String gameTitle;
 	
     protected Wall[][] topWalls;
@@ -21,49 +23,48 @@ public class GameController implements IGame, ILoadable, ISavable {
 	public GamePoint minotaurCharacter;
 	public GamePoint exitCharacter;
 	
+	public int amountOfMoves;
+	
 	/*
 	 * start()
 	 * Start's engine for game, e.g. map, characters
 	 */
-	public GameController() {
+	public GameController(int levelNumber) {
 		System.out.println("Starting Theseus and Minotaur...");
 		
 		System.out.println("\nLoading maze level...");
 		
 		FileLoader xmlLoader = new FileLoader();
-		xmlLoader.loadLevel(this);
 		
-		System.out.println("\n--- Loaded " + this.gameTitle + " ---");
-		
-		System.out.println("\nTOP WALLS:");
-		
-		for(int i = 0; i < this.topWalls.length; i++) {
-			for(int j = 0; j < this.topWalls[i].length; j++) {
-				System.out.print("  " + this.topWalls[i][j].toString("top"));
+		if(xmlLoader.loadLevel(this, levelNumber)) {
+			System.out.println("\n--- Loaded " + this.gameTitle + " ---");
+			
+			System.out.println("\nTOP WALLS:");
+			
+			for(int i = 0; i < this.topWalls.length; i++) {
+				for(int j = 0; j < this.topWalls[i].length; j++) {
+					System.out.print("  " + this.topWalls[i][j].toString("top"));
+				}
+				System.out.println("");
 			}
-			System.out.println("");
-		}
-		
-		System.out.println("-------");
-		System.out.println("LEFT WALLS:");
-		
-		for(int i = 0; i < this.leftWalls.length; i++) {
-			for(int j = 0; j < this.leftWalls[i].length; j++) {
-				System.out.print("  " + this.leftWalls[i][j].toString("left"));
+			
+			System.out.println("-------");
+			System.out.println("LEFT WALLS:");
+			
+			for(int i = 0; i < this.leftWalls.length; i++) {
+				for(int j = 0; j < this.leftWalls[i].length; j++) {
+					System.out.print("  " + this.leftWalls[i][j].toString("left"));
+				}
+				System.out.println("");
 			}
-			System.out.println("");
+			
+			System.out.println("\n--- Loading characters ---");
+			System.out.println("\nTheseus loaded, position: " + this.theseusCharacter.toString());
+			System.out.println("Minotaur loaded, position: " + this.minotaurCharacter.toString());
+			System.out.println("Exit loaded, position: " + this.exitCharacter.toString());			
+		} else {
+			System.out.println("Failed to load this level, out of bounds");
 		}
-		
-		System.out.println("\n--- Loading characters ---");
-		System.out.println("\nTheseus loaded, position: " + this.theseusCharacter.toString());
-		System.out.println("Minotaur loaded, position: " + this.minotaurCharacter.toString());
-		System.out.println("Exit loaded, position: " + this.exitCharacter.toString());
-
-		System.out.println("\nTesting Theseus Movement:\n");
-	}
-	
-	public void stop() {
-		System.out.println("Stopping Theseus and Minotaur...");
 	}
 	
 	/*
@@ -75,13 +76,29 @@ public class GameController implements IGame, ILoadable, ISavable {
 	public void moveTheseus(Direction direction) {
 		boolean canMove = this.canMove(direction, theseusCharacter);
 		
+		//Boolean to check if character can move
 		if(canMove) {
+			//Move theseus character location
 			theseusCharacter.moveLocation(direction.x, direction.y);
+			//Increment move counter for theseus
+			this.incrementTheseusMove();
 			
 			System.out.println("POSITION AFTER THESEUS MOVES "+ direction.name() +":" + theseusCharacter.toString());
 		} else {
 			System.out.println("Can't move " + direction.toString() + ", character blocked.");
 		}
+	}
+	
+	@Override
+	public void skipTheseus() {
+		this.incrementTheseusMove();
+		
+		System.out.println("Skipped theseus turn, position is: " + theseusCharacter.toString());
+	}
+	
+	@Override
+	public void incrementTheseusMove() {
+		this.amountOfMoves += 1;
 	}
 
 	@Override
@@ -156,11 +173,12 @@ public class GameController implements IGame, ILoadable, ISavable {
 	}
 	
 	public void createGrid() {
-		this.leftWalls = new Wall[this.mazeDepthDown][this.mazeWidthAcross];
-        this.topWalls = new Wall[this.mazeDepthDown][this.mazeWidthAcross];
+		//create multi-dimensional array for left and top walls, using sizing
+		this.leftWalls = new Wall[this.mazeWidthAcross][this.mazeDepthDown];
+        this.topWalls = new Wall[this.mazeWidthAcross][this.mazeDepthDown];
 
-        for (int i = 0; i < this.mazeDepthDown; ++i){
-            for (int j = 0; j < this.mazeWidthAcross; j++) {
+        for (int i = 0; i < this.mazeWidthAcross; ++i){
+            for (int j = 0; j < this.mazeDepthDown; j++) {
                 this.topWalls[i][j] = Wall.NOTHING;
                 this.leftWalls[i][j] = Wall.NOTHING;
             }
@@ -212,6 +230,7 @@ public class GameController implements IGame, ILoadable, ISavable {
 	 */
 	@Override
 	public Wall whatsAbove(IPoint where) {
+		//Checks if character is in bounds
 		if(where.getY() == -1 
 				|| where.getY() >= this.getDepthDown()) {
 			return Wall.SOMETHING;
@@ -225,6 +244,7 @@ public class GameController implements IGame, ILoadable, ISavable {
 	 */
 	@Override
 	public Wall whatsLeft(IPoint where) {
+		//Checks if character is in bounds
 		if(where.getX() == -1 
 				|| where.getX() >= this.getWidthAcross() ) {
 			return Wall.SOMETHING;

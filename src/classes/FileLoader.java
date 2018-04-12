@@ -22,32 +22,37 @@ public class FileLoader implements ILoader {
 	 */
     
 	@Override
-	public void loadLevel(ILoadable gameController) {
-		
+	public boolean loadLevel(ILoadable gameController, int levelNumber) {
 		Document xmlDoc = this.getXmlFile();
-		Element mazeItem = this.getMazeItems(xmlDoc);
+		Element mazeItem = this.getMazeItems(xmlDoc, levelNumber);
 		
-		//set game title
-		gameController.setGameTitle(mazeItem.getElementsByTagName("name").item(0).getTextContent());
-		
-		//get horizontal and vertical row of walls
-		NodeList horizontalWalls = this.getMazeWalls(mazeItem, "horizontal");
-        NodeList verticalWalls = this.getMazeWalls(mazeItem, "vertical");
-		
-        //Set the amount of horizontal rows maze will have
-		gameController.setWidthAcross(horizontalWalls.getLength());
-
-        //Set the amount of vertical rows maze will have
-		gameController.setDepthDown(verticalWalls.item(0).getTextContent().length());
-		
-		//Add all the walls from NodeList to multi level array by wall per row
-		this.addWallsToGame(gameController, "verticalAdd", verticalWalls);
-		this.addWallsToGame(gameController, "horizontalAdd", horizontalWalls);
-		
-		//Create character position
-		gameController.addTheseus(this.addCharacterToGame("theseus", mazeItem));
-		gameController.addMinotaur(this.addCharacterToGame("minotaur", mazeItem));
-		gameController.addExit(this.addCharacterToGame("exit", mazeItem));
+		if(mazeItem != null) {
+			
+			//set game title
+			gameController.setGameTitle(mazeItem.getElementsByTagName("name").item(0).getTextContent());
+			
+			//get horizontal and vertical row of walls from xml
+			NodeList horizontalWalls = this.getMazeWalls(mazeItem, "horizontal");
+	        NodeList verticalWalls = this.getMazeWalls(mazeItem, "vertical");
+			
+	        //Set the amount of horizontal rows maze will have
+			gameController.setWidthAcross(horizontalWalls.getLength());
+			
+	        //Set the amount of vertical rows maze will have
+			gameController.setDepthDown(verticalWalls.item(0).getTextContent().length());
+			
+			//Add all the walls from NodeList to multi level array by wall per row
+			this.addWallsToGame(gameController, "verticalAdd", verticalWalls);
+			this.addWallsToGame(gameController, "horizontalAdd", horizontalWalls);
+			
+			//Create character position
+			gameController.addTheseus(this.addCharacterToGame("theseus", mazeItem));
+			gameController.addMinotaur(this.addCharacterToGame("minotaur", mazeItem));
+			gameController.addExit(this.addCharacterToGame("exit", mazeItem));
+			
+			return true;
+		}
+		return false;
 	}
 	
 	/*
@@ -79,23 +84,33 @@ public class FileLoader implements ILoader {
 	/*
 	 * getMazeItems(Document xmlDoc)
 	 * Get the single maze item and convert it into a readable element
-	 * TODO : support for multiple levels (nList.getLength())
 	 */
 	
-	protected Element getMazeItems(Document xmlDoc) {
-		NodeList nList = xmlDoc.getElementsByTagName("maze");
+	protected Element getMazeItems(Document xmlDoc, int levelNumber) {
+		NodeList mazeList = xmlDoc.getElementsByTagName("maze");
 		
-		//Add loop with nList.getLength(), find specific maze in xml list
-		Node nNode = nList.item(0);
+		Node mazeItem = mazeList.item(levelNumber);
 		
-		if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+		if(mazeItem != null) {
+			if (mazeItem.getNodeType() == Node.ELEMENT_NODE) {
 
-			Element eElement = (Element) nNode;
-			
-			return eElement;
+				Element eElement = (Element) mazeItem;
+				
+				return eElement;
+			}
 		}
 		
 		return null;
+	}
+	
+	/*
+	 * getMazeByLevel(NodeList mazeItem, int levelNumber)
+	 * Checks if the maze level exists
+	 */
+	
+	protected Node getMazeByLevel(NodeList mazeItem, int levelNumber) {
+
+		return mazeItem.item(levelNumber);
 	}
 	
 	/*

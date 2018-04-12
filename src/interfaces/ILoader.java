@@ -1,5 +1,5 @@
 package interfaces;
 
 public interface ILoader {
-	void loadLevel(ILoadable game);
+	boolean loadLevel(ILoadable game, int levelNumber);
 }
