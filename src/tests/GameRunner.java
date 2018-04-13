@@ -13,8 +13,15 @@ public class GameRunner {
 			System.out.println("\nTesting Theseus Movement:\n");
 
 			controller.moveTheseus(Direction.LEFT);
-			controller.moveTheseus(Direction.UP);
+			controller.moveMinotaur();
+			controller.moveMinotaur();
 			controller.moveTheseus(Direction.RIGHT);
+			controller.moveMinotaur();
+			controller.moveMinotaur();
+			controller.moveTheseus(Direction.RIGHT);
+			controller.moveMinotaur();
+			controller.moveMinotaur();
+			controller.moveTheseus(Direction.UP);
 			
 			String minotaurHasWon = controller.minotaurHasWon() ? 
 					"Minotaur won the game" : "Minotaur has not won yet.";

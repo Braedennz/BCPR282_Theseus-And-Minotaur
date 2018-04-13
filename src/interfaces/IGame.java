@@ -4,7 +4,7 @@ import classes.GamePoint;
 import enums.Direction;
 
 public interface IGame {
-	void moveTheseus(Direction direction);
+	boolean moveTheseus(Direction direction);
 	void incrementTheseusMove();
 	boolean theseusHasWon();
 	

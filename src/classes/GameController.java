@@ -77,7 +77,7 @@ public class GameController implements IGame, ILoadable, ISavable {
 	 */
 
 	@Override
-	public void moveTheseus(Direction direction) {
+	public boolean moveTheseus(Direction direction) {
 		boolean canMove = this.canMove(direction, theseusCharacter);
 		
 		//Boolean to check if character can move
@@ -91,6 +91,8 @@ public class GameController implements IGame, ILoadable, ISavable {
 		} else {
 			System.out.println("Can't move " + direction.toString() + ", character blocked.");
 		}
+		
+		return canMove;
 	}
 	
 	@Override
@@ -107,8 +109,22 @@ public class GameController implements IGame, ILoadable, ISavable {
 
 	@Override
 	public void moveMinotaur() {
-		// TODO Auto-generated method stub
+		int differenceBetweenX = minotaurCharacter.getX() - theseusCharacter.getX();
+		int differenceBetweenY = minotaurCharacter.getY() - theseusCharacter.getY();
 		
+		if(differenceBetweenX > 0 && this.canMove(Direction.LEFT, minotaurCharacter)) {
+			minotaurCharacter.moveLocation(Direction.LEFT.x, Direction.LEFT.y);
+		} else if(differenceBetweenX < 0 && this.canMove(Direction.RIGHT, minotaurCharacter)) {
+			minotaurCharacter.moveLocation(Direction.RIGHT.x, Direction.RIGHT.y);
+		} else if(differenceBetweenY > 0 && this.canMove(Direction.UP, minotaurCharacter)) {
+			minotaurCharacter.moveLocation(Direction.UP.x, Direction.UP.y);
+		} else if(differenceBetweenY < 0 && this.canMove(Direction.DOWN, minotaurCharacter)) {
+			minotaurCharacter.moveLocation(Direction.DOWN.x, Direction.DOWN.y);
+		} else {
+			System.out.println("cant move minotaur");
+		}
+		
+		System.out.println("MOVED CHARACTER " + minotaurCharacter.toString());
 	}
 
 	@Override
@@ -127,8 +143,6 @@ public class GameController implements IGame, ILoadable, ISavable {
 	@Override
 	public boolean canMove(Direction direction, GamePoint character) {
 		int[] nextLocation = character.nextLocation(direction.x, direction.y);
-		
-		System.out.println("POSITION BEFORE THESEUS MOVES "+ direction.name() +": " + character.toString());
 		
 		switch(direction) {
 			case UP:
