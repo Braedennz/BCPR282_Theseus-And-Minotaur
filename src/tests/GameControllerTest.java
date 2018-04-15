@@ -14,7 +14,7 @@ public class GameControllerTest {
 	@Test
 	public void getTheseusPosition() {
 		
-		GameController controller = new GameController(0);
+		GameController controller = new GameController(0, false);
 		int expectedX = 1;
 		int expectedY = 2;
 		
@@ -31,7 +31,7 @@ public class GameControllerTest {
 	@Test
 	public void getMinotaurPosition() {
 		
-		GameController controller = new GameController(0);
+		GameController controller = new GameController(0, false);
 		int expectedX = 1;
 		int expectedY = 0;
 		
@@ -48,7 +48,7 @@ public class GameControllerTest {
 	@Test
 	public void getExitPosition() {
 		
-		GameController controller = new GameController(0);
+		GameController controller = new GameController(0, false);
 		int expectedX = 3;
 		int expectedY = 1;
 		

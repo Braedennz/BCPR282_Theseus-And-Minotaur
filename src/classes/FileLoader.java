@@ -13,8 +13,16 @@ import org.w3c.dom.NodeList;
 import enums.Wall;
 import interfaces.ILoadable;
 import interfaces.ILoader;
+import interfaces.ISavable;
+import interfaces.ISaver;
 
-public class FileLoader implements ILoader {
+public class FileLoader implements ILoader, ISaver {
+	
+	private static final String FILE_DIR = "E:/Dropbox/ARA/2018, February, Semester One/Java/BCPR282_Theseus-And-Minotaur/";
+	//private static final String FILE_DIR = "\"/Users/AMacADay/Dropbox/ARA/2018, February, Semester One/Java/BCPR282_Theseus-And-Minotaur/";
+
+	private static final String LEVELS_FILE = "levels.xml";
+	private static final String SAVES_FILE = "save.xml";
 	
 	/*
 	 * loadLevel()
@@ -23,8 +31,8 @@ public class FileLoader implements ILoader {
     
 	@Override
 	public boolean loadLevel(ILoadable gameController, int levelNumber) {
-		Document xmlDoc = this.getXmlFile();
-		Element mazeItem = this.getMazeItems(xmlDoc, levelNumber);
+		Document levelDoc = this.getXmlFile(FILE_DIR + LEVELS_FILE);
+		Element mazeItem = this.getMazeItems(levelDoc, levelNumber);
 		
 		if(mazeItem != null) {
 			
@@ -61,15 +69,14 @@ public class FileLoader implements ILoader {
 	 * TODO : Better way of getting directory for file
 	 */
 
-	protected Document getXmlFile() {
-		File fXmlFile = new File("E:/Dropbox/ARA/2018, February, Semester One/Java/BCPR282_Theseus-And-Minotaur/levels.xml");
-		//File fXmlFile = new File("/Users/AMacADay/Dropbox/ARA/2018, February, Semester One/Java/BCPR282_Theseus-And-Minotaur/levels.xml");
+	protected Document getXmlFile(String fileUrl) {
+		File xmlFile = new File(fileUrl);
 		
 		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 		
 		try {
 			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-			Document doc = dBuilder.parse(fXmlFile);
+			Document doc = dBuilder.parse(xmlFile);
 			
             doc.getDocumentElement().normalize();
             
@@ -101,16 +108,6 @@ public class FileLoader implements ILoader {
 		}
 		
 		return null;
-	}
-	
-	/*
-	 * getMazeByLevel(NodeList mazeItem, int levelNumber)
-	 * Checks if the maze level exists
-	 */
-	
-	protected Node getMazeByLevel(NodeList mazeItem, int levelNumber) {
-
-		return mazeItem.item(levelNumber);
 	}
 	
 	/*
@@ -161,5 +158,43 @@ public class FileLoader implements ILoader {
 		int y =  Integer.valueOf(actualCharacterItem.getElementsByTagName("y").item(0).getTextContent());
 		
 		return new GamePoint(x, y);
+	}
+
+	/*
+	 * addCharacterToGame(GameController game)
+	 * Loads a xml file that contains save configuration for previous game, 
+	 * sets game config according to this e.g. theseus, minotaur current position.
+	 * Return: true, false
+	 */
+	
+	@Override
+	public boolean loadSave(GameController game) {
+		Document saveDoc = this.getXmlFile(FILE_DIR + SAVES_FILE);
+
+		Element saveNode = (Element) saveDoc.getElementsByTagName("save").item(0);
+		
+        Element characterLevel = (Element) saveNode.getElementsByTagName("level").item(0);
+        Element characterPositions = (Element) saveNode.getElementsByTagName("positions").item(0);
+        
+        Element theseusPositions = (Element) characterPositions.getElementsByTagName("theseus").item(0);
+        Element minotaurPositions = (Element) saveNode.getElementsByTagName("minotaur").item(0);
+        
+        Element theseusPositionsX = (Element) theseusPositions.getElementsByTagName("x").item(0);
+        Element theseusPositionsY = (Element) theseusPositions.getElementsByTagName("y").item(0);
+        
+        Element minotaurPositionsX = (Element) minotaurPositions.getElementsByTagName("x").item(0);
+        Element minotaurPositionsY = (Element) minotaurPositions.getElementsByTagName("y").item(0);
+        
+        if(this.loadLevel(game, Integer.parseInt(characterLevel.getTextContent()))) {
+        	game.theseusCharacter.setLocation(Integer.parseInt(theseusPositionsX.getTextContent()), Integer.parseInt(theseusPositionsY.getTextContent()));
+        	game.minotaurCharacter.setLocation(Integer.parseInt(minotaurPositionsX.getTextContent()), Integer.parseInt(minotaurPositionsY.getTextContent()));
+        }
+        
+        return true;
+	}
+
+	@Override
+	public void save(ISavable savable) {
+		
 	}
 }

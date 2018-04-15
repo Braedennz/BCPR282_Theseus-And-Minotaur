@@ -29,19 +29,31 @@ public class GameController implements IGame, ILoadable, ISavable {
 	 * start()
 	 * Start's engine for game, e.g. map, characters
 	 */
-	public GameController(int levelNumber) {
+	public GameController(int levelNumber, boolean loadFromSave) {
 		System.out.println("Starting Theseus and Minotaur...");
 		
 		System.out.println("\nLoading maze level...");
 		
 		FileLoader xmlLoader = new FileLoader();
 		
-		if(xmlLoader.loadLevel(this, levelNumber)) {
-			System.out.println("\n--- Loaded " + this.gameTitle + " ---");
-			
-			this.readyToPlay = true;
+		if(loadFromSave) {
+			if(xmlLoader.loadSave(this)) {
+				System.out.println("\n--- Loaded " + this.gameTitle + " from save ---");
+				
+				this.readyToPlay = true;
+				
+				this.displayGameConfiguration();
+			} else {
+				System.out.println("Failed to load level from save");
+			}
 		} else {
-			System.out.println("Failed to load level ("+ levelNumber +"), out of bounds");
+			if(xmlLoader.loadLevel(this, levelNumber)) {
+				System.out.println("\n--- Loaded " + this.gameTitle + " ---");
+				
+				this.readyToPlay = true;
+			} else {
+				System.out.println("Failed to load level ("+ levelNumber +"), out of bounds");
+			}
 		}
 	}
 	
@@ -112,6 +124,8 @@ public class GameController implements IGame, ILoadable, ISavable {
 		int differenceBetweenX = minotaurCharacter.getX() - theseusCharacter.getX();
 		int differenceBetweenY = minotaurCharacter.getY() - theseusCharacter.getY();
 		
+		System.out.println("MINOTAUR before movement " + minotaurCharacter.toString());
+		
 		if(differenceBetweenX > 0 && this.canMove(Direction.LEFT, minotaurCharacter)) {
 			minotaurCharacter.moveLocation(Direction.LEFT.x, Direction.LEFT.y);
 		} else if(differenceBetweenX < 0 && this.canMove(Direction.RIGHT, minotaurCharacter)) {
@@ -121,10 +135,10 @@ public class GameController implements IGame, ILoadable, ISavable {
 		} else if(differenceBetweenY < 0 && this.canMove(Direction.DOWN, minotaurCharacter)) {
 			minotaurCharacter.moveLocation(Direction.DOWN.x, Direction.DOWN.y);
 		} else {
-			System.out.println("cant move minotaur");
+			System.out.println("Can't move minotaur blocked.");
 		}
 		
-		System.out.println("MOVED CHARACTER " + minotaurCharacter.toString());
+		System.out.println("MOVED MINOTAUR " + minotaurCharacter.toString());
 	}
 
 	@Override

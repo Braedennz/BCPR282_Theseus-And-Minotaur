@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding='UTF-8'?>
+<saves>
+    <save>
+        <level>0</level>
+        <positions>
+            <theseus>
+                <x>1</x>
+                <y>2</y>
+            </theseus>
+            <minotaur>
+                <x>1</x>
+                <y>0</y>
+            </minotaur>
+        </positions>
+    </save>
+</saves>
