@@ -12,6 +12,7 @@ public interface IGame {
 	boolean minotaurHasWon();
 	
 	void skipTheseus();
+	void resetLevel();
 	
 	boolean canMove(Direction direction, GamePoint character);
 }

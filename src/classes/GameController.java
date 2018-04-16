@@ -14,6 +14,8 @@ public class GameController implements IGame, ILoadable, ISavable {
 	public String gameTitle;
 	public int gameLevel;
 	
+	public boolean loadFromSave;
+	
     protected Wall[][] topWalls;
     protected Wall[][] leftWalls;
 	
@@ -37,12 +39,14 @@ public class GameController implements IGame, ILoadable, ISavable {
 		
 		FileLoader xmlLoader = new FileLoader();
 		
+		this.gameLevel = levelNumber;
+		this.loadFromSave = loadFromSave;
+		
 		if(loadFromSave) {
 			if(xmlLoader.loadSave(this)) {
 				System.out.println("\n--- Loaded " + this.gameTitle + " from save ---");
 				
 				this.readyToPlay = true;
-				this.gameLevel = levelNumber;
 				
 				this.displayGameConfiguration();
 			} else {
@@ -53,7 +57,6 @@ public class GameController implements IGame, ILoadable, ISavable {
 				System.out.println("\n--- Loaded " + this.gameTitle + " ---");
 				
 				this.readyToPlay = true;
-				this.gameLevel = levelNumber;
 			} else {
 				System.out.println("Failed to load level ("+ levelNumber +"), out of bounds");
 			}
@@ -115,6 +118,21 @@ public class GameController implements IGame, ILoadable, ISavable {
 		this.incrementTheseusMove();
 		
 		System.out.println("Skipped theseus turn, position is: " + theseusCharacter.toString());
+	}
+
+	@Override
+	public void resetLevel() {
+		this.readyToPlay = false;
+
+		FileLoader xmlLoader = new FileLoader();
+		
+		if(xmlLoader.loadLevel(this, this.gameLevel)) {
+			System.out.println("\n--- Re-Loaded " + this.gameTitle + " ---");
+			
+			this.readyToPlay = true;
+		} else {
+			System.out.println("Failed to load level ("+ this.gameLevel +"), out of bounds");
+		}
 	}
 	
 	@Override
