@@ -12,6 +12,7 @@ public class GameController implements IGame, ILoadable, ISavable {
 	public boolean readyToPlay = false;
 	
 	public String gameTitle;
+	public int gameLevel;
 	
     protected Wall[][] topWalls;
     protected Wall[][] leftWalls;
@@ -41,6 +42,7 @@ public class GameController implements IGame, ILoadable, ISavable {
 				System.out.println("\n--- Loaded " + this.gameTitle + " from save ---");
 				
 				this.readyToPlay = true;
+				this.gameLevel = levelNumber;
 				
 				this.displayGameConfiguration();
 			} else {
@@ -51,6 +53,7 @@ public class GameController implements IGame, ILoadable, ISavable {
 				System.out.println("\n--- Loaded " + this.gameTitle + " ---");
 				
 				this.readyToPlay = true;
+				this.gameLevel = levelNumber;
 			} else {
 				System.out.println("Failed to load level ("+ levelNumber +"), out of bounds");
 			}

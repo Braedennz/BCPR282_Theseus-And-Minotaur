@@ -1,9 +1,18 @@
 package classes;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -161,7 +170,7 @@ public class FileLoader implements ILoader, ISaver {
 	}
 
 	/*
-	 * addCharacterToGame(GameController game)
+	 * loadSave(GameController game)
 	 * Loads a xml file that contains save configuration for previous game, 
 	 * sets game config according to this e.g. theseus, minotaur current position.
 	 * Return: true, false
@@ -193,8 +202,87 @@ public class FileLoader implements ILoader, ISaver {
         return true;
 	}
 
+	/*
+	 * save(GameController game)
+	 * saves current game configuration e.g. x position, y position into xml file.
+	 * TODO: Clean up XML Builder, combine elements, build external functions
+	 */
+
 	@Override
-	public void save(ISavable savable) {
-		
+	public void save(GameController game) {
+		Document dom;
+	    DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+	    
+	    try {
+	        DocumentBuilder db = dbf.newDocumentBuilder();
+
+	        /* dom instance creation */
+	        dom = db.newDocument();
+	        
+	        // saves creation
+	        Element savesElement = dom.createElement("saves");
+	        
+	        /* save creation */
+	        Element save = dom.createElement("save");
+	        
+	        /* level creation */
+	        Element level = dom.createElement("level");
+	        level.appendChild(dom.createTextNode(Integer.toString(game.gameLevel)));
+	        
+	        /* positions creation */
+	        Element positions = dom.createElement("positions");
+	        
+	        /* Theseus creation */
+	        Element positionsTheseus = dom.createElement("theseus");
+	        Element positionsTheseusX = dom.createElement("x");
+	        Element positionsTheseusY = dom.createElement("y");
+	        
+	        positionsTheseusX.appendChild(dom.createTextNode(Integer.toString(game.theseusCharacter.getX())));
+	        positionsTheseusY.appendChild(dom.createTextNode(Integer.toString(game.theseusCharacter.getY())));
+	        
+	        positionsTheseus.appendChild(positionsTheseusX);
+	        positionsTheseus.appendChild(positionsTheseusY);
+	        
+	        /* Minotaur creation */
+	        Element positionsMinotaur = dom.createElement("minotaur");
+	        Element positionsMinotaurX = dom.createElement("x");
+	        Element positionsMinotaurY = dom.createElement("y");
+	        
+	        positionsMinotaurX.appendChild(dom.createTextNode(Integer.toString(game.minotaurCharacter.getX())));
+	        positionsMinotaurY.appendChild(dom.createTextNode(Integer.toString(game.minotaurCharacter.getY())));
+	        
+	        positionsMinotaur.appendChild(positionsMinotaurX);
+	        positionsMinotaur.appendChild(positionsMinotaurY);
+
+	        /* Append creation */
+	        positions.appendChild(positionsTheseus);
+	        positions.appendChild(positionsMinotaur);
+	        
+	        save.appendChild(level);
+	        save.appendChild(positions);
+	        
+	        savesElement.appendChild(save);
+	        
+	        dom.appendChild(savesElement);
+	        
+	        try {
+	            Transformer tr = TransformerFactory.newInstance().newTransformer();
+	            tr.setOutputProperty(OutputKeys.INDENT, "yes");
+	            tr.setOutputProperty(OutputKeys.METHOD, "xml");
+	            tr.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
+	            tr.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
+
+	            tr.transform(new DOMSource(dom), 
+	                                 new StreamResult(new FileOutputStream(FILE_DIR + SAVES_FILE)));
+	            
+	            System.out.println("CREATED SAVE");
+	        } catch (TransformerException te) {
+	            System.out.println(te.getMessage());
+	        } catch (IOException ioe) {
+	            System.out.println(ioe.getMessage());
+	        }
+	    } catch (ParserConfigurationException pce) {
+	        System.out.println("UsersXML: Error trying to instantiate DocumentBuilder " + pce);
+	    }
 	}
 }

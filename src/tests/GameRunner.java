@@ -6,7 +6,7 @@ import enums.Direction;
 
 public class GameRunner {
 	public static void main(String args[]) {
-		GameController controller = new GameController(-1, true);
+		GameController controller = new GameController(0, false);
 		
 		//controller.displayGameConfiguration();
 		
@@ -36,7 +36,7 @@ public class GameRunner {
 			System.out.println(theseusHasWon);*/
 
 			FileLoader xmlLoader = new FileLoader();
-			//xmlLoader.save(controller);
+			xmlLoader.save(controller);
 		}
 	}
 }

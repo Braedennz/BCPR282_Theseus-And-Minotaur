@@ -1,5 +1,7 @@
 package interfaces;
 
+import classes.GameController;
+
 public interface ISaver {
-	void save (ISavable savable);
+	void save (GameController game);
 }
