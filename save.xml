@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <saves>
     <save>
-        <level>0</level>
+        <level>1</level>
         <positions>
             <theseus>
-                <x>1</x>
+                <x>4</x>
                 <y>2</y>
             </theseus>
             <minotaur>
                 <x>1</x>
-                <y>0</y>
+                <y>2</y>
             </minotaur>
         </positions>
     </save>

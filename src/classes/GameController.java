@@ -14,8 +14,6 @@ public class GameController implements IGame, ILoadable, ISavable {
 	public String gameTitle;
 	public int gameLevel;
 	
-	public boolean loadFromSave;
-	
     protected Wall[][] topWalls;
     protected Wall[][] leftWalls;
 	
@@ -33,14 +31,7 @@ public class GameController implements IGame, ILoadable, ISavable {
 	 * Start's engine for game, e.g. map, characters
 	 */
 	public GameController(int levelNumber, boolean loadFromSave) {
-		System.out.println("Starting Theseus and Minotaur...");
-		
-		System.out.println("\nLoading maze level...");
-		
 		FileLoader xmlLoader = new FileLoader();
-		
-		this.gameLevel = levelNumber;
-		this.loadFromSave = loadFromSave;
 		
 		if(loadFromSave) {
 			if(xmlLoader.loadSave(this)) {
@@ -48,7 +39,6 @@ public class GameController implements IGame, ILoadable, ISavable {
 				
 				this.readyToPlay = true;
 				
-				this.displayGameConfiguration();
 			} else {
 				System.out.println("Failed to load level from save");
 			}
@@ -213,6 +203,11 @@ public class GameController implements IGame, ILoadable, ISavable {
 	@Override
 	public void setGameTitle(String gameTitle) {
 		this.gameTitle = gameTitle;
+	}
+
+	@Override
+	public void setGameLevel(int gameLevel) {
+		this.gameLevel = gameLevel;
 	}
 
 	@Override

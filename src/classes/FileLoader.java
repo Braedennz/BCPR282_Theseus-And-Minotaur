@@ -22,7 +22,6 @@ import org.w3c.dom.NodeList;
 import enums.Wall;
 import interfaces.ILoadable;
 import interfaces.ILoader;
-import interfaces.ISavable;
 import interfaces.ISaver;
 
 public class FileLoader implements ILoader, ISaver {
@@ -47,6 +46,9 @@ public class FileLoader implements ILoader, ISaver {
 			
 			//set game title
 			gameController.setGameTitle(mazeItem.getElementsByTagName("name").item(0).getTextContent());
+			
+			//set game level
+			gameController.setGameLevel(levelNumber);
 			
 			//get horizontal and vertical row of walls from xml
 			NodeList horizontalWalls = this.getMazeWalls(mazeItem, "horizontal");

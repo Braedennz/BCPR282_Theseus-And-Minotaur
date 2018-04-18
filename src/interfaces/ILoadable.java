@@ -12,5 +12,6 @@ public interface ILoadable {
 	void addExit(IPoint where);
 	
 	void setGameTitle(String gameTitle);
+	void setGameLevel(int gameLevel);
 	
 }
