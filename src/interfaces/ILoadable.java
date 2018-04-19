@@ -1,7 +1,6 @@
 package interfaces;
 
 public interface ILoadable {
-	
 	void setWidthAcross(int widthAcross);
 	void setDepthDown(int depthDown);
 	
@@ -13,5 +12,4 @@ public interface ILoadable {
 	
 	void setGameTitle(String gameTitle);
 	void setGameLevel(int gameLevel);
-	
 }

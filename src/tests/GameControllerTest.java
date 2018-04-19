@@ -68,7 +68,14 @@ public class GameControllerTest {
 	 */
 	@Test
 	public void loadSaveFromXMLFile() {
-		GameController controller = new GameController(-1, true);
+		GameController controller = new GameController(3, false);
+		
+		//Create save
+		FileLoader xmlLoader = new FileLoader();
+		xmlLoader.save(controller);
+		
+		//Load save
+		controller = new GameController(-1, true);
 		
 		String expectedGameTitle = "Maze 4 (5 x 5)";
 		String actualGameTitle = controller.gameTitle;
@@ -129,13 +136,10 @@ public class GameControllerTest {
 		
 		//Create game data to save
 		GameController controller = new GameController(1, false);
+
+		boolean charMoved = controller.moveTheseus(Direction.UP);
 		
-		controller.moveTheseus(Direction.UP);
-		
-		IPoint expectedTheseusPoint = new GamePoint(2, 0);
-		IPoint actualTheseusPoint = controller.wheresTheseus();
-		
-		assertTrue(expectedTheseusPoint.equals(actualTheseusPoint));
+		assertTrue(charMoved);
 	}
 
 	/*
@@ -147,13 +151,10 @@ public class GameControllerTest {
 		
 		//Create game data to save
 		GameController controller = new GameController(1, false);
+
+		boolean charMoved = controller.moveTheseus(Direction.DOWN);
 		
-		controller.moveTheseus(Direction.DOWN);
-		
-		IPoint expectedTheseusPoint = new GamePoint(2, 2);
-		IPoint actualTheseusPoint = controller.wheresTheseus();
-		
-		assertTrue(expectedTheseusPoint.equals(actualTheseusPoint));
+		assertTrue(charMoved);
 	}
 
 	/*
@@ -166,12 +167,9 @@ public class GameControllerTest {
 		//Create game data to save
 		GameController controller = new GameController(0, false);
 		
-		controller.moveTheseus(Direction.LEFT);
+		boolean charMoved = controller.moveTheseus(Direction.LEFT);
 		
-		IPoint expectedTheseusPoint = new GamePoint(0, 2);
-		IPoint actualTheseusPoint = controller.wheresTheseus();
-		
-		assertTrue(expectedTheseusPoint.equals(actualTheseusPoint));
+		assertTrue(charMoved);
 	}
 
 	/*
@@ -184,12 +182,9 @@ public class GameControllerTest {
 		//Create game data to save
 		GameController controller = new GameController(1, false);
 		
-		controller.moveTheseus(Direction.RIGHT);
+		boolean charMoved = controller.moveTheseus(Direction.RIGHT);
 		
-		IPoint expectedTheseusPoint = new GamePoint(3, 1);
-		IPoint actualTheseusPoint = controller.wheresTheseus();
-		
-		assertTrue(expectedTheseusPoint.equals(actualTheseusPoint));
+		assertTrue(charMoved);
 	}
 	
 	/*
@@ -202,7 +197,9 @@ public class GameControllerTest {
 		//Create game data to save
 		GameController controller = new GameController(1, false);
 		
-		controller.moveTheseus(Direction.UP);
+		boolean charMoved = controller.moveTheseus(Direction.UP);
+		assertTrue(charMoved);
+		
 		controller.moveMinotaur();
 		
 		IPoint expectedMinotaurPoint = new GamePoint(0, 0);
@@ -302,10 +299,7 @@ public class GameControllerTest {
 		//Create game data to save
 		GameController controller = new GameController(0, false);
 		
-		boolean expectedCanTheseusMove = false;
-		boolean actualCanTheseusMove = controller.canMove(Direction.DOWN, controller.theseusCharacter);
-		
-		assertEquals(expectedCanTheseusMove, actualCanTheseusMove);
+		assertFalse(controller.canMove(Direction.DOWN, controller.theseusCharacter));
 	}
 	
 	/*
@@ -346,13 +340,10 @@ public class GameControllerTest {
 		//Create game data to save
 		GameController controller = new GameController(0, false);
 		
-		controller.displayGameConfiguration();
-		
 		IPoint expectedExitPoint = new GamePoint(3, 1);
 		IPoint actualExitPoint = controller.wheresExit();
 		
 		assertTrue(expectedExitPoint.equals(actualExitPoint));
-		
 	}
 	
 	/*
@@ -379,10 +370,7 @@ public class GameControllerTest {
 		controller.moveMinotaur();
 		controller.moveTheseus(Direction.RIGHT);
 		
-		boolean expectedHasTheseusWon = true;
-		boolean actualHasTheseusWon = controller.theseusHasWon();
-		
-		assertEquals(expectedHasTheseusWon, actualHasTheseusWon);
+		assertTrue(controller.theseusHasWon());
 	}
 	
 	/*
@@ -401,10 +389,7 @@ public class GameControllerTest {
 		controller.skipTheseus();
 		controller.moveMinotaur();
 		
-		boolean expectedHasMinotaurWon = true;
-		boolean actualHasMinotaurWon = controller.minotaurHasWon();
-		
-		assertEquals(expectedHasMinotaurWon, actualHasMinotaurWon);
+		assertTrue(controller.minotaurHasWon());
 	}
 	
 	/*
@@ -423,10 +408,7 @@ public class GameControllerTest {
 		controller.skipTheseus();
 		controller.moveMinotaur();
 		
-		boolean expectedHasTheseusLost = true;
-		boolean actualHasTheseusLost = controller.minotaurHasWon();
-		
-		assertEquals(expectedHasTheseusLost, actualHasTheseusLost);
+		assertTrue(controller.minotaurHasWon());
 	}
 	
 	/*
@@ -494,6 +476,281 @@ public class GameControllerTest {
 	}
 	
 	/* Load level 1, 10. */
-	
+
+	/*
+	 * Level One is loaded
+	 * @result The expected maze title matches the loaded one
+	 */
+	@Test
+	public void loadLevelOne() {
+		GameController controller = new GameController(0, false);
+		
+		String expectedGameTitle = "Maze 1 (3 x 3)";
+		String actualGameTitle = controller.gameTitle;
+		
+		assertEquals(expectedGameTitle, actualGameTitle);
+	}
+
+	/*
+	 * Level Two is loaded
+	 * @result The expected maze title matches the loaded one
+	 */
+	@Test
+	public void loadLevelTwo() {
+		GameController controller = new GameController(1, false);
+		
+		String expectedGameTitle = "Maze 2 (7 x 4)";
+		String actualGameTitle = controller.gameTitle;
+		
+		assertEquals(expectedGameTitle, actualGameTitle);
+	}
+
+	/*
+	 * Level Three is loaded
+	 * @result The expected maze title matches the loaded one
+	 */
+	@Test
+	public void loadLevelThree() {
+		GameController controller = new GameController(2, false);
+		
+		String expectedGameTitle = "Maze 3 (3 x 4)";
+		String actualGameTitle = controller.gameTitle;
+		
+		assertEquals(expectedGameTitle, actualGameTitle);
+	}
+
+	/*
+	 * Level Four is loaded
+	 * @result The expected maze title matches the loaded one
+	 */
+	@Test
+	public void loadLevelFour() {
+		GameController controller = new GameController(3, false);
+		
+		String expectedGameTitle = "Maze 4 (5 x 5)";
+		String actualGameTitle = controller.gameTitle;
+		
+		assertEquals(expectedGameTitle, actualGameTitle);
+	}
+
+	/*
+	 * Level Five is loaded
+	 * @result The expected maze title matches the loaded one
+	 */
+	@Test
+	public void loadLevelFive() {
+		GameController controller = new GameController(4, false);
+		
+		String expectedGameTitle = "Maze 5 (7 x 5)";
+		String actualGameTitle = controller.gameTitle;
+		
+		assertEquals(expectedGameTitle, actualGameTitle);
+	}
+
+	/*
+	 * Level Six is loaded
+	 * @result The expected maze title matches the loaded one
+	 */
+	@Test
+	public void loadLevelSix() {
+		GameController controller = new GameController(5, false);
+		
+		String expectedGameTitle = "Maze 6 (6 x 6)";
+		String actualGameTitle = controller.gameTitle;
+		
+		assertEquals(expectedGameTitle, actualGameTitle);
+	}
+
+	/*
+	 * Level Seven is loaded
+	 * @result The expected maze title matches the loaded one
+	 */
+	@Test
+	public void loadLevelSeven() {
+		GameController controller = new GameController(6, false);
+		
+		String expectedGameTitle = "Maze 7 (6 x 6)";
+		String actualGameTitle = controller.gameTitle;
+		
+		assertEquals(expectedGameTitle, actualGameTitle);
+	}
+
+	/*
+	 * Level Eight is loaded
+	 * @result The expected maze title matches the loaded one
+	 */
+	@Test
+	public void loadLevelEight() {
+		GameController controller = new GameController(7, false);
+		
+		String expectedGameTitle = "Maze 8 (9 x 8)";
+		String actualGameTitle = controller.gameTitle;
+		
+		assertEquals(expectedGameTitle, actualGameTitle);
+	}
+
+	/*
+	 * Level Nine is loaded
+	 * @result The expected maze title matches the loaded one
+	 */
+	@Test
+	public void loadLevelNine() {
+		GameController controller = new GameController(8, false);
+		
+		String expectedGameTitle = "Maze 9 (9 x 8)";
+		String actualGameTitle = controller.gameTitle;
+		
+		assertEquals(expectedGameTitle, actualGameTitle);
+	}
+
+	/*
+	 * Level Ten is loaded
+	 * @result The expected maze title matches the loaded one
+	 */
+	@Test
+	public void loadLevelTen() {
+		GameController controller = new GameController(9, false);
+		
+		String expectedGameTitle = "Maze 10 (8 x 8)";
+		String actualGameTitle = controller.gameTitle;
+		
+		assertEquals(expectedGameTitle, actualGameTitle);
+	}
+
+	/*
+	 * Level One is won
+	 * @result Level one is won
+	 */
+	@Test
+	public void levelOneIsNotWon() {
+		GameController controller = new GameController(0, false);
+		
+		String expectedGameTitle = "Maze 1 (3 x 3)";
+		String actualGameTitle = controller.gameTitle;
+		
+		assertEquals(expectedGameTitle, actualGameTitle);
+	}
+
+	/*
+	 * Theseus trys to move out of bounds
+	 * @result move count in not updated.
+	 */
+	@Test
+	public void theseusCanNotMoveCountNotIncreased() {
+		GameController controller = new GameController(0, false);
+		
+		controller.moveTheseus(Direction.DOWN);
+		
+		int expectedMoveCount = 0;
+		int actualMoveCount = controller.amountOfMoves;
+		
+		assertEquals(expectedMoveCount, actualMoveCount);
+	}
+
+	/*
+	 * Minotaur is not able to move first
+	 * @result minotaurs position remains the same as starting position.
+	 */
+	@Test
+	public void minotaurWontMoveFirst() {
+		GameController controller = new GameController(0, false);
+		
+		controller.moveMinotaur();
+		controller.moveMinotaur();
+
+		IPoint expectedMinotaurPoint = new GamePoint(1, 0);
+		IPoint actualMinotaurPoint = controller.wheresMinotaur();
+		
+		assertTrue(expectedMinotaurPoint.equals(actualMinotaurPoint));
+	}
+
+	/*
+	 * Loads level two and plays two turns
+	 * @result minotaurs position remains the same as starting position, because of blocked wall.
+	 */
+	@Test
+	public void loadLevel2AndPlaysTwoTurns() {
+		GameController controller = new GameController(1, false);
+		
+		controller.moveTheseus(Direction.RIGHT);
+		controller.moveMinotaur();
+		controller.moveMinotaur();
+		controller.moveTheseus(Direction.RIGHT);
+		controller.moveMinotaur();
+		controller.moveMinotaur();
+
+		IPoint expectedMinotaurPoint = new GamePoint(0, 1);
+		IPoint actualMinotaurPoint = controller.wheresMinotaur();
+		
+		assertTrue(expectedMinotaurPoint.equals(actualMinotaurPoint));
+	}
+
+	/*
+	 * Loads level two and plays two turns
+	 * @result game is not over yet, no one has won
+	 */
+	@Test
+	public void loadLevel2AndPlaysTwoTurnsAndGameNotOver() {
+		GameController controller = new GameController(1, false);
+		
+		controller.moveTheseus(Direction.RIGHT);
+		controller.moveMinotaur();
+		controller.moveMinotaur();
+		controller.moveTheseus(Direction.RIGHT);
+		controller.moveMinotaur();
+		controller.moveMinotaur();
+
+		assertFalse(controller.minotaurHasWon());
+		assertFalse(controller.theseusHasWon());
+	}
+
+	/*
+	 * Once minotaur is trapped cannot move out unless out exit
+	 * @result minotaur cannot move
+	 */
+	@Test
+	public void minotaurCanNotMoveAfterTrap() {
+		GameController controller = new GameController(0, false);
+		
+		controller.moveTheseus(Direction.LEFT);
+		controller.moveMinotaur();
+		controller.moveMinotaur();
+		controller.moveTheseus(Direction.RIGHT);
+		controller.moveMinotaur();
+		controller.moveMinotaur();
+
+		IPoint expectedMinotaurPoint = new GamePoint(1, 1);
+		IPoint actualMinotaurPoint = controller.wheresMinotaur();
+		
+		assertTrue(expectedMinotaurPoint.equals(actualMinotaurPoint));
+	}
+
+	/*
+	 * tests whether you can load a map that doesn't exist
+	 * @result game is not ready to play.
+	 */
+	@Test
+	public void cantNotLoadOutOfBoundsMap() {
+		GameController controller = new GameController(12, false);
+		
+		assertFalse(controller.readyToPlay);
+	}
+
+	/*
+	 * Tests whether minotaur will win if character skips turn
+	 * @result minotaur has won game.
+	 */
+	@Test
+	public void minotaurCanWinByTheseusSkip() {
+		GameController controller = new GameController(0, false);
+		
+		controller.moveTheseus(Direction.LEFT);
+		controller.moveMinotaur();
+		controller.moveMinotaur();
+		controller.skipTheseus();
+		controller.moveMinotaur();
+		
+		assertTrue(controller.minotaurHasWon());
+	}
 }
 
