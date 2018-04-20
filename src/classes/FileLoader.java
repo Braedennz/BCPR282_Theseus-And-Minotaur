@@ -26,7 +26,7 @@ import interfaces.ISaver;
 
 public class FileLoader implements ILoader, ISaver {
 	
-	private static final String FILE_DIR = "E:/Dropbox/ARA/2018, February, Semester One/Java/BCPR282_Theseus-And-Minotaur/";
+	private static final String FILE_DIR = "./";
 	//private static final String FILE_DIR = "\"/Users/AMacADay/Dropbox/ARA/2018, February, Semester One/Java/BCPR282_Theseus-And-Minotaur/";
 
 	private static final String LEVELS_FILE = "levels.xml";
